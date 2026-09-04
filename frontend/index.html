@@ -1,12 +1,80 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Easy</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Job Easy — Hire & Hire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#14213D; --paper:#FAF8F3; --line:#E1DACB; --gold:#B8863B; --slate:#6B7280; }
+  *{box-sizing:border-box;} body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{ font-family:'Space Grotesk',sans-serif }
+  .switcher-wrap{ background:var(--ink); padding:12px 20px; display:flex; align-items:center; justify-content:space-between }
+  .brand{ color:var(--paper); font-weight:700; display:flex; align-items:center; gap:10px }
+  .switcher-note{ color:rgba(255,255,255,0.4); font-size:12px; font-family:'IBM Plex Mono',monospace }
+  .pub-nav{ display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-bottom:1px solid var(--line) }
+  .pub-nav .links{ display:flex; gap:18px }
+  .btn{ font-weight:600; padding:9px 16px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer }
+  .btn-solid{ background:var(--ink); color:var(--paper) }
+  .hero{ padding:48px 40px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:end }
+  .hero h1{ font-size:40px; margin:0 0 12px }
+  .hero p{ color:var(--slate); max-width:46ch }
+  .hero-stats{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line) }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px }
+  .card{ border:1px solid var(--line); padding:18px; background:#fff }
+  .tag{ font-size:11px; text-transform:uppercase; color:var(--gold); font-weight:700 }
+  footer.pub{ padding:20px 40px; color:var(--slate) }
+  @media (max-width:880px){ .hero{ grid-template-columns:1fr } .grid-4{ grid-template-columns:repeat(2,1fr) } }
+</style>
+</head>
+<body>
+
+<div class="switcher-wrap">
+  <div class="brand"><span style="width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700">JE</span> Job Easy</div>
+  <div class="switcher-note">Connecting employers, freelancers &amp; trainers — live data</div>
+</div>
+
+<div class="pub-nav">
+  <div class="brand" style="color:var(--ink);"><span style="width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700">JE</span> Job Easy</div>
+  <div class="links">
+    <a href="/jobs.html">Jobs</a><a href="#">Freelancers</a><a href="#">Trainers</a>
+    <a href="#">Training</a><a href="#">Manpower</a><a href="#">Employers</a>
+  </div>
+  <div class="pub-actions">
+    <button class="btn">Log in</button>
+    <button class="btn btn-solid">Register</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div>
+    <h1>One platform. Five ways to put people to work.</h1>
+    <p>Post a job, hire a freelancer, book a trainer, or request deployed manpower — listings are powered by our central API.</p>
+    <div style="margin-top:20px; display:flex; gap:10px;">
+      <a href="/jobs.html" class="btn btn-solid">Browse jobs</a>
+      <a href="#post" class="btn">Post a requirement</a>
+    </div>
+  </div>
+  <div class="hero-stats" id="hero-stats">
+    <div style="padding:18px 0 0"><div class="num" id="stat-jobs">—</div><div class="lbl">Active job postings</div></div>
+    <div style="padding:18px 0 0"><div class="num" id="stat-freelancers">—</div><div class="lbl">Verified freelancers</div></div>
+    <div style="padding:18px 0 0"><div class="num" id="stat-vendors">—</div><div class="lbl">Manpower vendors</div></div>
+  </div>
+</div>
+
+<div class="section" style="padding:30px 40px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h2>Featured jobs</h2><a href="/jobs.html">See all jobs →</a></div>
+  <div id="jobs-grid" class="grid-4">
+    <!-- Jobs will be rendered here -->
+  </div>
+</div>
+
+<footer class="pub">
+  <span>© Job Easy Platform</span>
+  <span>About · Contact · Terms · Privacy</span>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
 </html>
