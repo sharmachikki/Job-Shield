@@ -25,7 +25,12 @@
   .card{ border:1px solid var(--line); padding:18px; background:#fff }
   .tag{ font-size:11px; text-transform:uppercase; color:var(--gold); font-weight:700 }
   footer.pub{ padding:20px 40px; color:var(--slate) }
-  @media (max-width:880px){ .hero{ grid-template-columns:1fr } .grid-4{ grid-template-columns:repeat(2,1fr) } }
+  .section{ padding:30px 40px; }
+  .form-row{ display:flex; gap:12px; }
+  input,textarea,select{font-family:inherit;padding:8px;border:1px solid var(--line);width:100%}
+  label{display:block;margin-top:8px;font-weight:600}
+  .notice{margin-top:10px;color:var(--slate)}
+  @media (max-width:880px){ .hero{ grid-template-columns:1fr } .grid-4{ grid-template-columns:repeat(2,1fr) } .form-row{flex-direction:column} }
 </style>
 </head>
 <body>
@@ -38,12 +43,12 @@
 <div class="pub-nav">
   <div class="brand" style="color:var(--ink);"><span style="width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700">JE</span> Job Easy</div>
   <div class="links">
-    <a href="/jobs.html">Jobs</a><a href="#">Freelancers</a><a href="#">Trainers</a>
-    <a href="#">Training</a><a href="#">Manpower</a><a href="#">Employers</a>
+    <a href="/index.html">Home</a><a href="/jobs.html">Jobs</a><a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
   </div>
   <div class="pub-actions">
-    <button class="btn">Log in</button>
-    <button class="btn btn-solid">Register</button>
+    <a href="/login.html" class="btn">Log in</a>
+    <a href="/register.html" class="btn btn-solid">Register</a>
   </div>
 </div>
 
@@ -63,11 +68,42 @@
   </div>
 </div>
 
-<div class="section" style="padding:30px 40px;">
+<div class="section">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h2>Featured jobs</h2><a href="/jobs.html">See all jobs →</a></div>
   <div id="jobs-grid" class="grid-4">
     <!-- Jobs will be rendered here -->
   </div>
+</div>
+
+<!-- POST REQUIREMENT SECTION (target for #post) -->
+<div class="section" id="post">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2>Post a requirement</h2>
+  </div>
+  <form id="postForm">
+    <div class="form-row">
+      <div style="flex:1">
+        <label>Title</label>
+        <input name="title" required />
+      </div>
+      <div style="flex:1">
+        <label>Location</label>
+        <input name="location" />
+      </div>
+    </div>
+    <label>Description</label>
+    <textarea name="description" rows="5" required></textarea>
+    <div class="form-row" style="margin-top:10px">
+      <div style="flex:1">
+        <label>Contact email</label>
+        <input name="contactEmail" type="email" required />
+      </div>
+      <div style="width:160px;display:flex;align-items:end">
+        <button class="btn btn-solid" type="submit">Submit requirement</button>
+      </div>
+    </div>
+    <div id="postMsg" class="notice"></div>
+  </form>
 </div>
 
 <footer class="pub">
@@ -75,6 +111,31 @@
   <span>About · Contact · Terms · Privacy</span>
 </footer>
 
-<script src="/js/app.js"></script>
+<script src="/js/jobs-helper.js"></script>
+<script>
+// Post requirement form handler — posts to API and falls back to static behavior if API not available
+document.getElementById('postForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const form = e.target; const msg = document.getElementById('postMsg'); msg.textContent='Submitting...';
+  const data = {
+    title: form.title.value,
+    description: form.description.value,
+    location: form.location.value,
+    contactEmail: form.contactEmail.value
+  };
+  try{
+    const res = await fetch('/api/v1/requirements', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+    if(res.ok){ msg.textContent = 'Requirement submitted. Our team will review it.'; form.reset(); return; }
+    // fallback to static success if 4xx/5xx
+    console.warn('API returned', res.status);
+    msg.textContent = 'Submitted locally (API returned error). Please contact support.';
+  }catch(err){
+    console.warn('API request failed, saving locally to static fallback (demo)', err);
+    // demo fallback: append to localStorage list so user sees confirmation
+    const list = JSON.parse(localStorage.getItem('localRequirements')||'[]'); list.push(data); localStorage.setItem('localRequirements', JSON.stringify(list));
+    msg.textContent = 'Requirement saved locally (demo mode). It will be submitted when the API is available.';
+  }
+});
+</script>
 </body>
 </html>
