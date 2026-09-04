@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Job Easy — Structure Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213D;
+    --ink-soft:#2A3A5C;
+    --paper:#FAF8F3;
+    --paper-dim:#F1EDE3;
+    --line:#E1DACB;
+    --gold:#B8863B;
+    --gold-soft:#EFE1C6;
+    --green:#3F7D58;
+    --green-soft:#E1EEE5;
+    --red:#B23A34;
+    --red-soft:#F6E3E1;
+    --slate:#6B7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- App switcher ---------- */
+  .switcher-wrap{
+    background:var(--ink);
+    padding:18px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .brand{
+    color:var(--paper);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .mark{
+    width:28px;height:28px;
+    background:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink);
+    font-weight:700;
+    font-size:14px;
+  }
+  .switcher{
+    display:flex;
+    background:rgba(255,255,255,0.06);
+    padding:4px;
+    gap:2px;
+  }
+  .switcher button{
+    border:none;
+    background:transparent;
+    color:rgba(255,255,255,0.55);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    padding:9px 16px;
+    cursor:pointer;
+  }
+  .switcher button.active{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .switcher-note{
+    color:rgba(255,255,255,0.4);
+    font-size:12px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  /* ---------- Status pills (mirror DB enum statuses) ---------- */
+  .pill{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    font-family:'IBM Plex Mono',monospace;
+    padding:3px 8px;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .pill-gold{ background:var(--gold-soft); color:#8A6321; }
+  .pill-green{ background:var(--green-soft); color:var(--green); }
+  .pill-red{ background:var(--red-soft); color:var(--red); }
+  .pill-slate{ background:#EAEAEA; color:#555; }
+
+  /* ================= PUBLIC SITE ================= */
+  .pub-nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 40px; border-bottom:1px solid var(--line);
+    flex-wrap:wrap; gap:12px;
+  }
+  .pub-nav .links{ display:flex; gap:26px; font-size:14px; font-weight:500; }
+  .pub-nav .links a:hover{ color:var(--gold); }
+  .pub-actions{ display:flex; gap:10px; }
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600; font-size:13.5px;
+    padding:9px 18px;
+    border:1px solid var(--ink);
+    cursor:pointer;
+    background:transparent;
+    color:var(--ink);
+  }
+  .btn-solid{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .btn-gold{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+
+  .hero{
+    padding:70px 40px 60px;
+    border-bottom:1px solid var(--line);
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:end;
+  }
+  .hero h1{ font-size:44px; line-height:1.08; margin:0 0 18px; max-width:14ch; }
+  .hero p{ max-width:46ch; color:var(--slate); font-size:16px; line-height:1.6; }
+  .hero-stats{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); }
+  .hero-stats div{ padding:18px 0 0; border-left:1px solid var(--line); padding-left:16px; }
+  .hero-stats div:first-child{ border-left:none; padding-left:0; }
+  .hero-stats .num{ font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; }
+  .hero-stats .lbl{ color:var(--slate); font-size:12.5px; margin-top:2px; }
+
+  .section{ padding:48px 40px; border-bottom:1px solid var(--line); }
+  .section-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:22px; }
+  .section-head h2{ font-size:22px; margin:0; }
+  .section-head .see-all{ font-size:13px; font-weight:600; color:var(--gold); }
+
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  .card{ border:1px solid var(--line); padding:18px; background:#fff; }
+  .card .tag{ font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--gold); font-weight:700; font-family:'IBM Plex Mono',monospace;}
+  .card h3{ font-size:16.5px; margin:8px 0 6px; }
+  .card .meta{ color:var(--slate); font-size:13px; }
+  .card .foot{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:13px; }
+
+  .module-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .module-strip a{ background:var(--paper); padding:22px 20px; }
+  .module-strip a:hover{ background:var(--paper-dim); }
+  .module-strip .num{ font-family:'IBM Plex Mono',monospace; color:var(--gold); font-size:12px; }
+  .module-strip h3{ font-size:16px; margin:6px 0 4px; }
+  .module-strip p{ color:var(--slate); font-size:12.5px; margin:0; }
+
+  footer.pub{ padding:30px 40px; display:flex; justify-content:space-between; color:var(--slate); font-size:12.5px; }
+
+  /* ================= APP SHELL (dashboard / admin) ================= */
+  .app-shell{ display:flex; min-height:640px; }
+  .sidebar{
+    width:230px; background:var(--ink); color:rgba(255,255,255,0.75);
+    padding:24px 0; flex-shrink:0;
+  }
+  .sidebar .side-label{ padding:0 22px 10px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,0.35); }
+  .sidebar a{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 22px; font-size:13.5px; font-weight:500;
+    border-left:3px solid transparent;
+    color:rgba(255,255,255,0.72);
+  }
+  .sidebar a:hover{ background:rgba(255,255,255,0.05); }
+  .sidebar a.on{ border-left-color:var(--gold); color:#fff; background:rgba(255,255,255,0.06); }
+  .sidebar .dot{ width:5px;height:5px;background:currentColor;border-radius:50%; opacity:.6;}
+
+  .app-main{ flex:1; padding:28px 36px; background:var(--paper); }
+  .app-topline{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .app-topline h2{ margin:0; font-size:21px; }
+  .app-topline .who{ font-size:13px; color:var(--slate); }
+
+  .stat-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
+  .stat{ background:#fff; border:1px solid var(--line); padding:16px 18px; }
+  .stat .lbl{ font-size:12px; color:var(--slate); }
+  .stat .val{ font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; margin-top:4px; }
+  .stat .sub{ font-size:11.5px; color:var(--green); margin-top:3px; }
+
+  .panel{ background:#fff; border:1px solid var(--line); margin-bottom:20px; }
+  .panel .p-head{ padding:14px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .panel .p-head h3{ font-size:14.5px; margin:0; }
+  .panel .p-head .cnt{ font-size:12px; color:var(--slate); font-family:'IBM Plex Mono',monospace; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th{ text-align:left; padding:10px 18px; font-size:11px; text-transform:uppercase; letter-spacing:.03em; color:var(--slate); border-bottom:1px solid var(--line); font-weight:600; }
+  td{ padding:11px 18px; border-bottom:1px solid var(--line); }
+  tr:last-child td{ border-bottom:none; }
+  .row-title{ font-weight:600; }
+  .row-sub{ color:var(--slate); font-size:12px; }
+
+  .two-col{ display:grid; grid-template-columns:1.4fr 1fr; gap:20px; }
+
+  .wallet-card{ background:var(--ink); color:#fff; padding:22px; }
+  .wallet-card .lbl{ font-size:12px; color:rgba(255,255,255,0.55); }
+  .wallet-card .amt{ font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; margin:6px 0 16px; }
+  .wallet-card .row{ display:flex; justify-content:space-between; font-size:12.5px; padding:7px 0; border-top:1px solid rgba(255,255,255,0.12); }
+
+  .approval-flow{ display:flex; align-items:center; gap:6px; margin-bottom:22px; flex-wrap:wrap; }
+  .approval-flow .step{ font-family:'IBM Plex Mono',monospace; font-size:11px; padding:6px 10px; border:1px solid var(--line); background:#fff; color:var(--slate); }
+  .approval-flow .step.on{ background:var(--gold-soft); border-color:var(--gold); color:#8A6321; font-weight:600; }
+  .approval-flow .arrow{ color:var(--slate); font-size:12px; }
+
+  /* ---------- Admin: dashboard vs settings switch ---------- */
+  .admin-panel-view{ display:none; }
+  .admin-panel-view.active{ display:block; }
+
+  /* ---------- Settings ---------- */
+  .settings-tabs{ display:flex; gap:2px; margin-bottom:20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .settings-tabs button{
+    border:none; background:transparent; padding:10px 16px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    color:var(--slate); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .settings-tabs button.on{ color:var(--ink); border-bottom-color:var(--gold); }
+
+  .settings-pane{ display:none; }
+  .settings-pane.on{ display:block; }
+
+  .form-grid{ padding:16px 18px; display:grid; gap:14px; }
+  .form-grid label{ display:flex; flex-direction:column; gap:6px; font-size:12px; font-weight:600; color:var(--slate); }
+  .form-grid input[type=text], .form-grid textarea{
+    font-family:'Inter',sans-serif; font-size:13.5px; font-weight:400;
+    padding:9px 10px; border:1px solid var(--line); background:var(--paper); color:var(--ink); resize:vertical;
+  }
+  .form-grid input[type=text]:focus, .form-grid textarea:focus{ outline:2px solid var(--gold); outline-offset:0; border-color:var(--gold); }
+
+  .media-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:16px 18px; }
+  .media-slot{ border:1px solid var(--line); padding:14px; text-align:center; background:var(--paper); }
+  .media-preview{ height:80px; display:flex; align-items:center; justify-content:center; background:var(--ink); color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; margin-bottom:10px; }
+  .hero-preview{ background:linear-gradient(135deg, var(--ink), var(--gold)); }
+  .favicon-preview{ width:44px; height:44px; margin:0 auto 10px; font-size:12px; }
+  .media-meta{ margin-bottom:10px; }
+  .media-meta strong{ display:block; font-size:13px; }
+  .media-meta span{ display:block; font-size:11.5px; color:var(--slate); margin-top:2px; }
+
+  .panel-foot{ padding:12px 18px; border-top:1px solid var(--line); }
+
+  .theme-grid{ padding:18px; display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:24px; }
+  .theme-control label{ display:block; font-size:12px; font-weight:600; color:var(--slate); margin-bottom:8px; }
+  .color-row{ display:flex; align-items:center; gap:10px; }
+  .color-row input[type=color]{ width:44px; height:32px; border:1px solid var(--line); padding:0; background:none; cursor:pointer; }
+  .lbl-sm{ font-size:12px; font-weight:600; color:var(--slate); display:block; margin-bottom:8px; }
+  .preset-row{ display:flex; gap:8px; }
+  .preset{ width:36px; height:36px; border:1px solid var(--line); cursor:pointer; padding:0; background:linear-gradient(135deg, var(--sw1) 50%, var(--sw2) 50%); }
+  .theme-note{ padding:0 18px 18px; font-size:12.5px; color:var(--slate); }
+
+  .settings-save-bar{ display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:6px; }
+  .save-toast{ font-size:12.5px; color:var(--green); opacity:0; transition:opacity .25s; margin-right:auto; font-weight:600; }
+  .save-toast.show{ opacity:1; }
+
+  @media (max-width:880px){
+    .hero{ grid-template-columns:1fr; }
+    .grid-4, .grid-3, .module-strip{ grid-template-columns:repeat(2,1fr); }
+    .app-shell{ flex-direction:column; }
+    .sidebar{ width:100%; display:flex; overflow-x:auto; padding:10px; }
+    .sidebar a{ border-left:none; border-bottom:3px solid transparent; white-space:nowrap; }
+    .sidebar a.on{ border-bottom-color:var(--gold); border-left-color:transparent; }
+    .stat-row{ grid-template-columns:repeat(2,1fr); }
+    .two-col{ grid-template-columns:1fr; }
+    .media-grid{ grid-template-columns:1fr; }
+    .theme-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="switcher-wrap">
+  <div class="brand"><span class="mark">JE</span> Job Easy — structure demo</div>
+  <div class="switcher">
+    <button class="active" data-view="public">Public Website</button>
+    <button data-view="dashboard">User Dashboard</button>
+    <button data-view="admin">Admin Console</button>
+  </div>
+  <div class="switcher-note">static mock data · no backend calls</div>
+</div>
+
+<!-- ========================= PUBLIC SITE ========================= -->
+<div class="view active" id="view-public">
+
+  <div class="pub-nav">
+    <div class="brand" style="color:var(--ink);"><span class="mark">JE</span> Job Easy</div>
+    <div class="links">
+      <a href="#">Jobs</a><a href="#">Freelancers</a><a href="#">Trainers</a>
+      <a href="#">Training</a><a href="#">Manpower</a><a href="#">Employers</a>
+    </div>
+    <div class="pub-actions">
+      <button class="btn">Log in</button>
+      <button class="btn btn-gold">Register</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1>One platform. Five ways to put people to work.</h1>
+      <p>Post a job, hire a freelancer, book a trainer, or request deployed manpower — every listing runs through the same central approval, pricing, and payment engine.</p>
+      <div style="margin-top:22px; display:flex; gap:10px;">
+        <button class="btn btn-solid">Browse jobs</button>
+        <button class="btn">Post a requirement</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div><div class="num">4,812</div><div class="lbl">Active job postings</div></div>
+      <div><div class="num">1,206</div><div class="lbl">Verified freelancers</div></div>
+      <div><div class="num">318</div><div class="lbl">Manpower vendors</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2>Featured jobs</h2><a class="see-all" href="#">See all jobs →</a></div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="tag">Full-time · Remote</div>
+        <h3>Senior Backend Engineer</h3>
+        <div class="meta">Nimbus Retail Pvt Ltd · Bengaluru</div>
+        <div class="foot"><span>₹18–26L /yr</span><span class="pill pill-green">Published</span></div>
+      </div>
+      <div class="card">
+        <div class="tag">Contract</div>
+        <h3>Site Electrical Supervisor</h3>
+        <div class="meta">Vantage Infra · Pune</div>
+        <div class="foot"><span>₹65k /mo</span><span class="pill pill-green">Published</span></div>
+      </div>
+      <div class="card">
+        <div class="tag">Full-time</div>
+        <h3>Talent Acquisition Lead</h3>
+        <div class="meta">Orbit Health · Hyderabad</div>
+        <div class="foot"><span>₹12–15L /yr</span><span class="pill pill-gold">Under review</span></div>
+      </div>
+      <div class="card">
+        <div class="tag">Part-time</div>
+        <h3>Bookkeeper (Freelance)</h3>
+        <div class="meta">Studio Marram · Remote</div>
+        <div class="foot"><span>₹800 /hr</span><span class="pill pill-green">Published</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2>Freelance services</h2><a class="see-all" href="#">Browse freelancers →</a></div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="tag">Design</div>
+        <h3>Brand identity in 7 days</h3>
+        <div class="meta">Meera K. · ★ 4.9 (112 reviews)</div>
+        <div class="foot"><span>From ₹22,000</span><span class="pill pill-slate">Fixed price</span></div>
+      </div>
+      <div class="card">
+        <div class="tag">Engineering</div>
+        <h3>React + Node MVP build</h3>
+        <div class="meta">Arjun P. · ★ 4.8 (76 reviews)</div>
+        <div class="foot"><span>₹1,400 /hr</span><span class="pill pill-slate">Hourly</span></div>
+      </div>
+      <div class="card">
+        <div class="tag">Compliance</div>
+        <h3>GST filing &amp; reconciliation</h3>
+        <div class="meta">Ledgerline CA Services · ★ 5.0 (44 reviews)</div>
+        <div class="foot"><span>From ₹4,500 /mo</span><span class="pill pill-slate">Retainer</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2>Explore the platform</h2></div>
+    <div class="module-strip">
+      <a href="#"><div class="num">01</div><h3>Training programs</h3><p>Cohort &amp; corporate training, run by verified trainers.</p></a>
+      <a href="#"><div class="num">02</div><h3>Manpower services</h3><p>Request deployed workers through vetted vendors.</p></a>
+      <a href="#"><div class="num">03</div><h3>For employers</h3><p>Post roles, screen candidates, manage offers.</p></a>
+      <a href="#"><div class="num">04</div><h3>For vendors</h3><p>Register, get verified, quote on requirements.</p></a>
+    </div>
+  </div>
+
+  <footer class="pub">
+    <span>© Job Easy Platform</span>
+    <span>About · Contact · Terms · Privacy</span>
+  </footer>
+</div>
+
+<!-- ========================= USER DASHBOARD ========================= -->
+<div class="view" id="view-dashboard">
+  <div class="app-shell">
+    <div class="sidebar">
+      <div class="side-label">Workspace</div>
+      <a class="on" href="#"><span class="dot"></span> Overview</a>
+      <a href="#"><span class="dot"></span> Applications</a>
+      <a href="#"><span class="dot"></span> Projects</a>
+      <a href="#"><span class="dot"></span> Wallet</a>
+      <a href="#"><span class="dot"></span> Messages</a>
+      <a href="#"><span class="dot"></span> Documents</a>
+    </div>
+    <div class="app-main">
+      <div class="app-topline">
+        <h2>Overview</h2>
+        <div class="who">Signed in as <strong>Ritika Sen</strong> · Job Seeker + Freelancer</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="lbl">Active applications</div><div class="val">6</div><div class="sub">2 in interview stage</div></div>
+        <div class="stat"><div class="lbl">Open proposals</div><div class="val">3</div><div class="sub">1 awaiting client reply</div></div>
+        <div class="stat"><div class="lbl">Wallet balance</div><div class="val">₹42,300</div><div class="sub">₹8,000 on hold</div></div>
+        <div class="stat"><div class="lbl">Unread messages</div><div class="val">4</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="panel">
+            <div class="p-head"><h3>Recent applications</h3><span class="cnt">job_applications</span></div>
+            <table>
+              <tr><th>Role</th><th>Company</th><th>Applied</th><th>Status</th></tr>
+              <tr><td><div class="row-title">Senior Backend Engineer</div><div class="row-sub">Full-time · Remote</div></td><td>Nimbus Retail</td><td>2 days ago</td><td><span class="pill pill-gold">Interview</span></td></tr>
+              <tr><td><div class="row-title">Product Analyst</div><div class="row-sub">Full-time</div></td><td>Orbit Health</td><td>5 days ago</td><td><span class="pill pill-slate">Screening</span></td></tr>
+              <tr><td><div class="row-title">React + Node MVP</div><div class="row-sub">Freelance proposal</div></td><td>Studio Marram</td><td>1 week ago</td><td><span class="pill pill-green">Accepted</span></td></tr>
+              <tr><td><div class="row-title">Ops Coordinator</div><div class="row-sub">Contract</div></td><td>Vantage Infra</td><td>2 weeks ago</td><td><span class="pill pill-red">Rejected</span></td></tr>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="p-head"><h3>Active contract — milestones</h3><span class="cnt">project_milestones</span></div>
+            <table>
+              <tr><th>Milestone</th><th>Amount</th><th>Due</th><th>Status</th></tr>
+              <tr><td>Design system &amp; auth</td><td>₹15,000</td><td>Sep 10</td><td><span class="pill pill-green">Paid</span></td></tr>
+              <tr><td>Core API + dashboard</td><td>₹20,000</td><td>Sep 24</td><td><span class="pill pill-gold">In progress</span></td></tr>
+              <tr><td>QA &amp; handover</td><td>₹8,000</td><td>Oct 02</td><td><span class="pill pill-slate">Pending</span></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div class="wallet-card">
+            <div class="lbl">Wallet balance</div>
+            <div class="amt">₹42,300.00</div>
+            <div class="row"><span>Available</span><span>₹34,300</span></div>
+            <div class="row"><span>On hold (milestone)</span><span>₹8,000</span></div>
+            <div class="row"><span>Last payout</span><span>₹15,000 · Sep 1</span></div>
+          </div>
+          <div class="panel" style="margin-top:16px;">
+            <div class="p-head"><h3>Documents</h3><span class="cnt">documents</span></div>
+            <table>
+              <tr><td>PAN card</td><td><span class="pill pill-green">Verified</span></td></tr>
+              <tr><td>Resume.pdf</td><td><span class="pill pill-green">Verified</span></td></tr>
+              <tr><td>Portfolio sample</td><td><span class="pill pill-gold">Under review</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= ADMIN CONSOLE ========================= -->
+<div class="view" id="view-admin">
+  <div class="app-shell">
+    <div class="sidebar">
+      <div class="side-label">Admin</div>
+      <a class="on" href="#" data-admin="dashboard"><span class="dot"></span> Dashboard</a>
+      <a href="#"><span class="dot"></span> Approvals</a>
+      <a href="#"><span class="dot"></span> User management</a>
+      <a href="#"><span class="dot"></span> Recruitment</a>
+      <a href="#"><span class="dot"></span> Marketplace</a>
+      <a href="#"><span class="dot"></span> Finance</a>
+      <a href="#"><span class="dot"></span> Disputes</a>
+      <a href="#"><span class="dot"></span> Documents</a>
+      <a href="#"><span class="dot"></span> Reports</a>
+      <a href="#"><span class="dot"></span> Audit logs</a>
+      <a href="#" data-admin="settings"><span class="dot"></span> Settings</a>
+    </div>
+    <div class="app-main">
+    <div class="admin-panel-view active" id="admin-dashboard-panel">
+      <div class="app-topline">
+        <h2>Approvals queue</h2>
+        <div class="who">Signed in as <strong>Admin — Operations</strong></div>
+      </div>
+
+      <div class="approval-flow">
+        <span class="step">DRAFT</span><span class="arrow">→</span>
+        <span class="step on">SUBMITTED</span><span class="arrow">→</span>
+        <span class="step">UNDER_REVIEW</span><span class="arrow">→</span>
+        <span class="step">APPROVED / REJECTED</span><span class="arrow">→</span>
+        <span class="step">PUBLISHED</span>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="lbl">Pending approvals</div><div class="val">27</div><div class="sub">across 5 entity types</div></div>
+        <div class="stat"><div class="lbl">Open disputes</div><div class="val">4</div><div class="sub">1 payment on hold</div></div>
+        <div class="stat"><div class="lbl">Docs to verify</div><div class="val">13</div></div>
+        <div class="stat"><div class="lbl">GMV this month</div><div class="val">₹18.4L</div><div class="sub">↑ 12% vs last month</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="panel">
+            <div class="p-head"><h3>Approvals</h3><span class="cnt">approvals</span></div>
+            <table>
+              <tr><th>Entity</th><th>Submitted by</th><th>Type</th><th>Status</th></tr>
+              <tr><td><div class="row-title">Senior Backend Engineer</div><div class="row-sub">Job posting</div></td><td>Nimbus Retail</td><td>JOB</td><td><span class="pill pill-gold">Under review</span></td></tr>
+              <tr><td><div class="row-title">GST filing service</div><div class="row-sub">Freelancer service</div></td><td>Ledgerline CA</td><td>FREELANCER_SERVICE</td><td><span class="pill pill-slate">Submitted</span></td></tr>
+              <tr><td><div class="row-title">Advanced Excel — Corporate</div><div class="row-sub">Training program</div></td><td>Meera K.</td><td>TRAINING_PROGRAM</td><td><span class="pill pill-red">Correction required</span></td></tr>
+              <tr><td><div class="row-title">SecureStaff Solutions</div><div class="row-sub">Vendor registration</div></td><td>SecureStaff</td><td>VENDOR</td><td><span class="pill pill-green">Approved</span></td></tr>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="p-head"><h3>Open disputes</h3><span class="cnt">disputes</span></div>
+            <table>
+              <tr><th>Context</th><th>Raised by</th><th>Reason</th><th>Status</th></tr>
+              <tr><td>Milestone #2 — MVP build</td><td>Studio Marram</td><td>Deliverable incomplete</td><td><span class="pill pill-red">Payment hold</span></td></tr>
+              <tr><td>Deployment — Vantage Infra</td><td>Vantage Infra</td><td>Worker no-show</td><td><span class="pill pill-gold">Under review</span></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel">
+            <div class="p-head"><h3>Finance snapshot</h3><span class="cnt">transactions</span></div>
+            <table>
+              <tr><td>Job posting fees</td><td>₹1,42,000</td></tr>
+              <tr><td>Freelancer commission</td><td>₹3,08,500</td></tr>
+              <tr><td>Training commission</td><td>₹96,200</td></tr>
+              <tr><td>Vendor registration fees</td><td>₹40,000</td></tr>
+            </table>
+          </div>
+          <div class="panel" style="margin-top:16px;">
+            <div class="p-head"><h3>Audit log</h3><span class="cnt">audit_logs</span></div>
+            <table>
+              <tr><td class="mono" style="font-size:12px;">JOB_APPROVED</td><td style="font-size:12px;color:var(--slate);">2m ago</td></tr>
+              <tr><td class="mono" style="font-size:12px;">WALLET_DEBITED</td><td style="font-size:12px;color:var(--slate);">14m ago</td></tr>
+              <tr><td class="mono" style="font-size:12px;">DOCUMENT_VERIFIED</td><td style="font-size:12px;color:var(--slate);">1h ago</td></tr>
+              <tr><td class="mono" style="font-size:12px;">USER_SUSPENDED</td><td style="font-size:12px;color:var(--slate);">3h ago</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /admin-dashboard-panel -->
+
+    <div class="admin-panel-view" id="admin-settings-panel">
+      <div class="app-topline">
+        <h2>Site settings</h2>
+        <div class="who">Signed in as <strong>Admin — Operations</strong></div>
+      </div>
+
+      <div class="settings-tabs">
+        <button class="on" data-settings="content">Site content</button>
+        <button data-settings="media">Media &amp; images</button>
+        <button data-settings="offers">Offers &amp; promotions</button>
+        <button data-settings="headerfooter">Header &amp; footer</button>
+        <button data-settings="theme">Theme</button>
+      </div>
+
+      <!-- Site content -->
+      <div class="settings-pane on" id="settings-content">
+        <div class="panel">
+          <div class="p-head"><h3>Homepage content</h3><span class="cnt">site_settings</span></div>
+          <div class="form-grid">
+            <label>Hero heading
+              <input type="text" value="One platform. Five ways to put people to work.">
+            </label>
+            <label>Hero subtext
+              <textarea rows="3">Post a job, hire a freelancer, book a trainer, or request deployed manpower — every listing runs through the same central approval, pricing, and payment engine.</textarea>
+            </label>
+            <label>About page copy
+              <textarea rows="4">Job Easy connects employers, freelancers, trainers, and manpower vendors on one verified, centrally governed platform.</textarea>
+            </label>
+            <label>Support contact email
+              <input type="text" value="support@jobeasy.example">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media & images -->
+      <div class="settings-pane" id="settings-media">
+        <div class="panel">
+          <div class="p-head"><h3>Brand &amp; media assets</h3><span class="cnt">files</span></div>
+          <div class="media-grid">
+            <div class="media-slot">
+              <div class="media-preview logo-preview">JE</div>
+              <div class="media-meta"><strong>Site logo</strong><span>SVG or PNG, 200×60</span></div>
+              <button class="btn">Replace</button>
+            </div>
+            <div class="media-slot">
+              <div class="media-preview hero-preview"></div>
+              <div class="media-meta"><strong>Homepage hero image</strong><span>JPG, 1600×800</span></div>
+              <button class="btn">Replace</button>
+            </div>
+            <div class="media-slot">
+              <div class="media-preview favicon-preview">JE</div>
+              <div class="media-meta"><strong>Favicon</strong><span>ICO/PNG, 64×64</span></div>
+              <button class="btn">Replace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offers & promotions -->
+      <div class="settings-pane" id="settings-offers">
+        <div class="panel">
+          <div class="p-head"><h3>Offers &amp; promotional listings</h3><span class="cnt">coupons · discounts</span></div>
+          <table>
+            <tr><th>Offer</th><th>Type</th><th>Value</th><th>Valid till</th><th>Status</th></tr>
+            <tr><td>Launch discount — job posting</td><td>Coupon</td><td>20% off</td><td>Sep 30</td><td><span class="pill pill-green">Active</span></td></tr>
+            <tr><td>Free featured listing — new employers</td><td>Promo banner</td><td>1 free / mo</td><td>Oct 15</td><td><span class="pill pill-green">Active</span></td></tr>
+            <tr><td>Festive vendor onboarding fee waiver</td><td>Discount</td><td>100% off</td><td>Sep 12</td><td><span class="pill pill-slate">Scheduled</span></td></tr>
+          </table>
+          <div class="panel-foot"><button class="btn btn-gold">+ Add offer</button></div>
+        </div>
+      </div>
+
+      <!-- Header & footer -->
+      <div class="settings-pane" id="settings-headerfooter">
+        <div class="two-col">
+          <div class="panel">
+            <div class="p-head"><h3>Header navigation</h3><span class="cnt">nav_links</span></div>
+            <table>
+              <tr><th>Label</th><th>Link</th><th></th></tr>
+              <tr><td>Jobs</td><td>/jobs</td><td class="mono" style="color:var(--slate);">visible</td></tr>
+              <tr><td>Freelancers</td><td>/freelancers</td><td class="mono" style="color:var(--slate);">visible</td></tr>
+              <tr><td>Trainers</td><td>/trainers</td><td class="mono" style="color:var(--slate);">visible</td></tr>
+              <tr><td>Manpower</td><td>/manpower</td><td class="mono" style="color:var(--slate);">visible</td></tr>
+            </table>
+            <div class="panel-foot"><button class="btn">+ Add nav link</button></div>
+          </div>
+          <div class="panel">
+            <div class="p-head"><h3>Footer content</h3><span class="cnt">footer_settings</span></div>
+            <div class="form-grid">
+              <label>Footer tagline
+                <input type="text" value="Hiring, freelancing, training, and manpower — verified end to end.">
+              </label>
+              <label>Footer links (comma separated)
+                <input type="text" value="About, Contact, Terms, Privacy">
+              </label>
+              <label>Social links
+                <input type="text" value="linkedin.com/company/jobeasy, twitter.com/jobeasy">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="settings-pane" id="settings-theme">
+        <div class="panel">
+          <div class="p-head"><h3>Site theme</h3><span class="cnt">applies platform-wide</span></div>
+          <div class="theme-grid">
+            <div class="theme-control">
+              <label for="accentPicker">Accent color</label>
+              <div class="color-row">
+                <input type="color" id="accentPicker" value="#B8863B">
+                <span class="mono" id="accentHex">#B8863B</span>
+              </div>
+            </div>
+            <div class="theme-control">
+              <label for="inkPicker">Base / ink color</label>
+              <div class="color-row">
+                <input type="color" id="inkPicker" value="#14213D">
+                <span class="mono" id="inkHex">#14213D</span>
+              </div>
+            </div>
+            <div class="theme-control">
+              <span class="lbl-sm">Presets</span>
+              <div class="preset-row">
+                <button class="preset" title="Ink & gold" data-ink="#14213D" data-gold="#B8863B" style="--sw1:#14213D;--sw2:#B8863B;"></button>
+                <button class="preset" title="Charcoal & sage" data-ink="#1F2937" data-gold="#3F7D58" style="--sw1:#1F2937;--sw2:#3F7D58;"></button>
+                <button class="preset" title="Maroon & amber" data-ink="#3D1F2B" data-gold="#C99A3A" style="--sw1:#3D1F2B;--sw2:#C99A3A;"></button>
+                <button class="preset" title="Navy & blue" data-ink="#101828" data-gold="#5B7FDB" style="--sw1:#101828;--sw2:#5B7FDB;"></button>
+              </div>
+            </div>
+          </div>
+          <p class="theme-note">Changes apply live across the public site, dashboard, and admin console — switch views with the top switcher to preview.</p>
+        </div>
+      </div>
+
+      <div class="settings-save-bar">
+        <span id="saveToast" class="save-toast">Changes saved</span>
+        <button class="btn">Discard</button>
+        <button class="btn btn-solid" id="saveSettingsBtn">Save changes</button>
+      </div>
+    </div>
+    <!-- /admin-settings-panel -->
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.switcher button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.switcher button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+
+  // ---- Admin: Dashboard vs Settings ----
+  document.querySelectorAll('.sidebar a[data-admin]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.sidebar a[data-admin]').forEach(l => l.classList.remove('on'));
+      link.classList.add('on');
+      document.querySelectorAll('.admin-panel-view').forEach(p => p.classList.remove('active'));
+      document.getElementById('admin-' + link.dataset.admin + '-panel').classList.add('active');
+    });
+  });
+
+  // ---- Settings sub-tabs ----
+  document.querySelectorAll('.settings-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.settings-tabs button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      document.querySelectorAll('.settings-pane').forEach(p => p.classList.remove('on'));
+      document.getElementById('settings-' + btn.dataset.settings).classList.add('on');
+    });
+  });
+
+  // ---- Theme color controls (applied live via CSS custom properties) ----
+  const accentPicker = document.getElementById('accentPicker');
+  const inkPicker = document.getElementById('inkPicker');
+  const accentHex = document.getElementById('accentHex');
+  const inkHex = document.getElementById('inkHex');
+
+  function setAccent(hex) {
+    document.documentElement.style.setProperty('--gold', hex);
+    if (accentPicker) accentPicker.value = hex;
+    if (accentHex) accentHex.textContent = hex.toUpperCase();
+  }
+  function setInk(hex) {
+    document.documentElement.style.setProperty('--ink', hex);
+    if (inkPicker) inkPicker.value = hex;
+    if (inkHex) inkHex.textContent = hex.toUpperCase();
+  }
+  if (accentPicker) accentPicker.addEventListener('input', (e) => setAccent(e.target.value));
+  if (inkPicker) inkPicker.addEventListener('input', (e) => setInk(e.target.value));
+
+  document.querySelectorAll('.preset').forEach(p => {
+    p.addEventListener('click', () => { setInk(p.dataset.ink); setAccent(p.dataset.gold); });
+  });
+
+  // ---- Fake save feedback ----
+  const saveBtn = document.getElementById('saveSettingsBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const toast = document.getElementById('saveToast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Live-theming hook: Settings > Theme (see pages/admin/Settings.jsx) writes
+ * to these two variables via ThemeContext. Any element using the
+ * text-[var(--theme-accent)] / bg-[var(--theme-accent)] Tailwind arbitrary-
+ * value syntax below picks up changes immediately, without a rebuild —
+ * mirroring how demo.html's theme picker works.
+ */
+:root {
+  --theme-accent: #B8863B;
+  --theme-base: #14213D;
+}

@@ -1,0 +1,26 @@
+// This file intentionally starts minimal.
+// Recommended flow:
+//   1. Run database/schema.sql against MySQL to create job_portal_db.
+//   2. Point DATABASE_URL (.env) at that database.
+//   3. Run `npx prisma db pull` to introspect and auto-generate every model below
+//      from the tables already defined in database/schema.sql (source of truth).
+//   4. Run `npx prisma generate` to build the client used by src/config/database.js.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  uuid      String   @unique @db.Char(36)
+  fullName  String   @map("full_name") @db.VarChar(150)
+  email     String   @unique @db.VarChar(191)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
