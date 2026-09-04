@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import RequireAuth from './RequireAuth';
+import { ADMIN_ROLES } from '../constants/roles';
+
 import PublicLayout from '../../layouts/PublicLayout';
 import UserLayout from '../../layouts/UserLayout';
 import AdminLayout from '../../layouts/AdminLayout';
@@ -37,8 +40,6 @@ import Reports from '../../pages/admin/Reports';
 import AuditLogs from '../../pages/admin/AuditLogs';
 import Settings from '../../pages/admin/Settings';
 
-// TODO: wrap /dashboard/* and /admin/* in a <RequireAuth roles={[...]}> guard
-// once the login flow is fully wired (check context/AuthContext.jsx).
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -59,7 +60,14 @@ export default function AppRouter() {
           <Route path="/register" element={<Register />} />
         </Route>
 
-        <Route path="/dashboard" element={<UserLayout />}>
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <UserLayout />
+            </RequireAuth>
+          }
+        >
           <Route index element={<Overview />} />
           <Route path="applications" element={<Applications />} />
           <Route path="projects" element={<Projects />} />
@@ -68,7 +76,14 @@ export default function AppRouter() {
           <Route path="documents" element={<Documents />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth roles={ADMIN_ROLES}>
+              <AdminLayout />
+            </RequireAuth>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="approvals" element={<Approvals />} />
           <Route path="users" element={<UserManagement />} />
