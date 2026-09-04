@@ -3,421 +3,78 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Job Easy — Structure Demo</title>
+<title>Job Easy — Hire & Hire</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#14213D;
-    --ink-soft:#2A3A5C;
-    --paper:#FAF8F3;
-    --paper-dim:#F1EDE3;
-    --line:#E1DACB;
-    --gold:#B8863B;
-    --gold-soft:#EFE1C6;
-    --green:#3F7D58;
-    --green-soft:#E1EEE5;
-    --red:#B23A34;
-    --red-soft:#F6E3E1;
-    --slate:#6B7280;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    font-size:15px;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em; }
-  .mono{ font-family:'IBM Plex Mono',monospace; }
-  a{ color:inherit; text-decoration:none; }
-
-  /* ---------- App switcher ---------- */
-  .switcher-wrap{
-    background:var(--ink);
-    padding:18px 28px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:14px;
-  }
-  .brand{
-    color:var(--paper);
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    font-size:19px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .brand .mark{
-    width:28px;height:28px;
-    background:var(--gold);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--ink);
-    font-weight:700;
-    font-size:14px;
-  }
-  .switcher{
-    display:flex;
-    background:rgba(255,255,255,0.06);
-    padding:4px;
-    gap:2px;
-  }
-  .switcher button{
-    border:none;
-    background:transparent;
-    color:rgba(255,255,255,0.55);
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:13px;
-    padding:9px 16px;
-    cursor:pointer;
-  }
-  .switcher button.active{
-    background:var(--paper);
-    color:var(--ink);
-  }
-  .switcher-note{
-    color:rgba(255,255,255,0.4);
-    font-size:12px;
-    font-family:'IBM Plex Mono',monospace;
-  }
-
-  .view{ display:none; }
-  .view.active{ display:block; }
-
-  /* ---------- Status pills (mirror DB enum statuses) ---------- */
-  .pill{
-    display:inline-block;
-    font-size:11px;
-    font-weight:600;
-    font-family:'IBM Plex Mono',monospace;
-    padding:3px 8px;
-    text-transform:uppercase;
-    letter-spacing:0.02em;
-  }
-  .pill-gold{ background:var(--gold-soft); color:#8A6321; }
-  .pill-green{ background:var(--green-soft); color:var(--green); }
-  .pill-red{ background:var(--red-soft); color:var(--red); }
-  .pill-slate{ background:#EAEAEA; color:#555; }
-
-  /* ================= PUBLIC SITE ================= */
-  .pub-nav{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 40px; border-bottom:1px solid var(--line);
-    flex-wrap:wrap; gap:12px;
-  }
-  .pub-nav .links{ display:flex; gap:26px; font-size:14px; font-weight:500; }
-  .pub-nav .links a:hover{ color:var(--gold); }
-  .pub-actions{ display:flex; gap:10px; }
-  .btn{
-    font-family:'Inter',sans-serif;
-    font-weight:600; font-size:13.5px;
-    padding:9px 18px;
-    border:1px solid var(--ink);
-    cursor:pointer;
-    background:transparent;
-    color:var(--ink);
-  }
-  .btn-solid{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .btn-gold{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
-
-  .hero{
-    padding:70px 40px 60px;
-    border-bottom:1px solid var(--line);
-    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:end;
-  }
-  .hero h1{ font-size:44px; line-height:1.08; margin:0 0 18px; max-width:14ch; }
-  .hero p{ max-width:46ch; color:var(--slate); font-size:16px; line-height:1.6; }
-  .hero-stats{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); }
-  .hero-stats div{ padding:18px 0 0; border-left:1px solid var(--line); padding-left:16px; }
-  .hero-stats div:first-child{ border-left:none; padding-left:0; }
-  .hero-stats .num{ font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; }
-  .hero-stats .lbl{ color:var(--slate); font-size:12.5px; margin-top:2px; }
-
-  .section{ padding:48px 40px; border-bottom:1px solid var(--line); }
-  .section-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:22px; }
-  .section-head h2{ font-size:22px; margin:0; }
-  .section-head .see-all{ font-size:13px; font-weight:600; color:var(--gold); }
-
-  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-
-  .card{ border:1px solid var(--line); padding:18px; background:#fff; }
-  .card .tag{ font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--gold); font-weight:700; font-family:'IBM Plex Mono',monospace;}
-  .card h3{ font-size:16.5px; margin:8px 0 6px; }
-  .card .meta{ color:var(--slate); font-size:13px; }
-  .card .foot{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:13px; }
-
-  .module-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
-  .module-strip a{ background:var(--paper); padding:22px 20px; }
-  .module-strip a:hover{ background:var(--paper-dim); }
-  .module-strip .num{ font-family:'IBM Plex Mono',monospace; color:var(--gold); font-size:12px; }
-  .module-strip h3{ font-size:16px; margin:6px 0 4px; }
-  .module-strip p{ color:var(--slate); font-size:12.5px; margin:0; }
-
-  footer.pub{ padding:30px 40px; display:flex; justify-content:space-between; color:var(--slate); font-size:12.5px; }
-
-  /* ================= APP SHELL (dashboard / admin) ================= */
-  .app-shell{ display:flex; min-height:640px; }
-  .sidebar{
-    width:230px; background:var(--ink); color:rgba(255,255,255,0.75);
-    padding:24px 0; flex-shrink:0;
-  }
-  .sidebar .side-label{ padding:0 22px 10px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,0.35); }
-  .sidebar a{
-    display:flex; align-items:center; gap:10px;
-    padding:10px 22px; font-size:13.5px; font-weight:500;
-    border-left:3px solid transparent;
-    color:rgba(255,255,255,0.72);
-  }
-  .sidebar a:hover{ background:rgba(255,255,255,0.05); }
-  .sidebar a.on{ border-left-color:var(--gold); color:#fff; background:rgba(255,255,255,0.06); }
-  .sidebar .dot{ width:5px;height:5px;background:currentColor;border-radius:50%; opacity:.6;}
-
-  .app-main{ flex:1; padding:28px 36px; background:var(--paper); }
-  .app-topline{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
-  .app-topline h2{ margin:0; font-size:21px; }
-  .app-topline .who{ font-size:13px; color:var(--slate); }
-
-  .stat-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
-  .stat{ background:#fff; border:1px solid var(--line); padding:16px 18px; }
-  .stat .lbl{ font-size:12px; color:var(--slate); }
-  .stat .val{ font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; margin-top:4px; }
-  .stat .sub{ font-size:11.5px; color:var(--green); margin-top:3px; }
-
-  .panel{ background:#fff; border:1px solid var(--line); margin-bottom:20px; }
-  .panel .p-head{ padding:14px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
-  .panel .p-head h3{ font-size:14.5px; margin:0; }
-  .panel .p-head .cnt{ font-size:12px; color:var(--slate); font-family:'IBM Plex Mono',monospace; }
-
-  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
-  th{ text-align:left; padding:10px 18px; font-size:11px; text-transform:uppercase; letter-spacing:.03em; color:var(--slate); border-bottom:1px solid var(--line); font-weight:600; }
-  td{ padding:11px 18px; border-bottom:1px solid var(--line); }
-  tr:last-child td{ border-bottom:none; }
-  .row-title{ font-weight:600; }
-  .row-sub{ color:var(--slate); font-size:12px; }
-
-  .two-col{ display:grid; grid-template-columns:1.4fr 1fr; gap:20px; }
-
-  .wallet-card{ background:var(--ink); color:#fff; padding:22px; }
-  .wallet-card .lbl{ font-size:12px; color:rgba(255,255,255,0.55); }
-  .wallet-card .amt{ font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; margin:6px 0 16px; }
-  .wallet-card .row{ display:flex; justify-content:space-between; font-size:12.5px; padding:7px 0; border-top:1px solid rgba(255,255,255,0.12); }
-
-  .approval-flow{ display:flex; align-items:center; gap:6px; margin-bottom:22px; flex-wrap:wrap; }
-  .approval-flow .step{ font-family:'IBM Plex Mono',monospace; font-size:11px; padding:6px 10px; border:1px solid var(--line); background:#fff; color:var(--slate); }
-  .approval-flow .step.on{ background:var(--gold-soft); border-color:var(--gold); color:#8A6321; font-weight:600; }
-  .approval-flow .arrow{ color:var(--slate); font-size:12px; }
-
-  /* ---------- Admin: dashboard vs settings switch ---------- */
-  .admin-panel-view{ display:none; }
-  .admin-panel-view.active{ display:block; }
-
-  /* ---------- Settings ---------- */
-  .settings-tabs{ display:flex; gap:2px; margin-bottom:20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
-  .settings-tabs button{
-    border:none; background:transparent; padding:10px 16px;
-    font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
-    color:var(--slate); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px;
-  }
-  .settings-tabs button.on{ color:var(--ink); border-bottom-color:var(--gold); }
-
-  .settings-pane{ display:none; }
-  .settings-pane.on{ display:block; }
-
-  .form-grid{ padding:16px 18px; display:grid; gap:14px; }
-  .form-grid label{ display:flex; flex-direction:column; gap:6px; font-size:12px; font-weight:600; color:var(--slate); }
-  .form-grid input[type=text], .form-grid textarea{
-    font-family:'Inter',sans-serif; font-size:13.5px; font-weight:400;
-    padding:9px 10px; border:1px solid var(--line); background:var(--paper); color:var(--ink); resize:vertical;
-  }
-  .form-grid input[type=text]:focus, .form-grid textarea:focus{ outline:2px solid var(--gold); outline-offset:0; border-color:var(--gold); }
-
-  .media-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:16px 18px; }
-  .media-slot{ border:1px solid var(--line); padding:14px; text-align:center; background:var(--paper); }
-  .media-preview{ height:80px; display:flex; align-items:center; justify-content:center; background:var(--ink); color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; margin-bottom:[...]
-  .hero-preview{ background:linear-gradient(135deg, var(--ink), var(--gold)); }
-  .favicon-preview{ width:44px; height:44px; margin:0 auto 10px; font-size:12px; }
-  .media-meta{ margin-bottom:10px; }
-  .media-meta strong{ display:block; font-size:13px; }
-  .media-meta span{ display:block; font-size:11.5px; color:var(--slate); margin-top:2px; }
-
-  .panel-foot{ padding:12px 18px; border-top:1px solid var(--line); }
-
-  .theme-grid{ padding:18px; display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:24px; }
-  .theme-control label{ display:block; font-size:12px; font-weight:600; color:var(--slate); margin-bottom:8px; }
-  .color-row{ display:flex; align-items:center; gap:10px; }
-  .color-row input[type=color]{ width:44px; height:32px; border:1px solid var(--line); padding:0; background:none; cursor:pointer; }
-  .lbl-sm{ font-size:12px; font-weight:600; color:var(--slate); display:block; margin-bottom:8px; }
-  .preset-row{ display:flex; gap:8px; }
-  .preset{ width:36px; height:36px; border:1px solid var(--line); cursor:pointer; padding:0; background:linear-gradient(135deg, var(--sw1) 50%, var(--sw2) 50%); }
-  .theme-note{ padding:0 18px 18px; font-size:12.5px; color:var(--slate); }
-
-  .settings-save-bar{ display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:6px; }
-  .save-toast{ font-size:12.5px; color:var(--green); opacity:0; transition:opacity .25s; margin-right:auto; font-weight:600; }
-  .save-toast.show{ opacity:1; }
-
-  @media (max-width:880px){
-    .hero{ grid-template-columns:1fr; }
-    .grid-4, .grid-3, .module-strip{ grid-template-columns:repeat(2,1fr); }
-    .app-shell{ flex-direction:column; }
-    .sidebar{ width:100%; display:flex; overflow-x:auto; padding:10px; }
-    .sidebar a{ border-left:none; border-bottom:3px solid transparent; white-space:nowrap; }
-    .sidebar a.on{ border-bottom-color:var(--gold); border-left-color:transparent; }
-    .stat-row{ grid-template-columns:repeat(2,1fr); }
-    .two-col{ grid-template-columns:1fr; }
-    .media-grid{ grid-template-columns:1fr; }
-    .theme-grid{ grid-template-columns:1fr; }
-  }
+  :root{ --ink:#14213D; --paper:#FAF8F3; --line:#E1DACB; --gold:#B8863B; --slate:#6B7280; }
+  *{box-sizing:border-box;} body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{ font-family:'Space Grotesk',sans-serif }
+  .switcher-wrap{ background:var(--ink); padding:12px 20px; display:flex; align-items:center; justify-content:space-between }
+  .brand{ color:var(--paper); font-weight:700; display:flex; align-items:center; gap:10px }
+  .switcher-note{ color:rgba(255,255,255,0.4); font-size:12px; font-family:'IBM Plex Mono',monospace }
+  .pub-nav{ display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-bottom:1px solid var(--line) }
+  .pub-nav .links{ display:flex; gap:18px }
+  .btn{ font-weight:600; padding:9px 16px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer }
+  .btn-solid{ background:var(--ink); color:var(--paper) }
+  .hero{ padding:48px 40px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:end }
+  .hero h1{ font-size:40px; margin:0 0 12px }
+  .hero p{ color:var(--slate); max-width:46ch }
+  .hero-stats{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line) }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px }
+  .card{ border:1px solid var(--line); padding:18px; background:#fff }
+  .tag{ font-size:11px; text-transform:uppercase; color:var(--gold); font-weight:700 }
+  footer.pub{ padding:20px 40px; color:var(--slate) }
+  @media (max-width:880px){ .hero{ grid-template-columns:1fr } .grid-4{ grid-template-columns:repeat(2,1fr) } }
 </style>
 </head>
 <body>
 
 <div class="switcher-wrap">
-  <div class="brand"><span class="mark">JE</span> Job Easy — structure demo</div>
-  <div class="switcher">
-    <button class="active" data-view="public">Public Website</button>
-    <button data-view="dashboard">User Dashboard</button>
-    <button data-view="admin">Admin Console</button>
-  </div>
-  <div class="switcher-note">static mock data · no backend calls</div>
+  <div class="brand"><span style="width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700">JE</span> Job Easy</div>
+  <div class="switcher-note">Connecting employers, freelancers &amp; trainers — live data</div>
 </div>
 
-<!-- ========================= PUBLIC SITE ========================= -->
-<div class="view active" id="view-public">
-
-  <div class="pub-nav">
-    <div class="brand" style="color:var(--ink);"><span class="mark">JE</span> Job Easy</div>
-    <div class="links">
-      <a href="#">Jobs</a><a href="#">Freelancers</a><a href="#">Trainers</a>
-      <a href="#">Training</a><a href="#">Manpower</a><a href="#">Employers</a>
-    </div>
-    <div class="pub-actions">
-      <button class="btn">Log in</button>
-      <button class="btn btn-gold">Register</button>
-    </div>
+<div class="pub-nav">
+  <div class="brand" style="color:var(--ink);"><span style="width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700">JE</span> Job Easy</div>
+  <div class="links">
+    <a href="/jobs.html">Jobs</a><a href="#">Freelancers</a><a href="#">Trainers</a>
+    <a href="#">Training</a><a href="#">Manpower</a><a href="#">Employers</a>
   </div>
-
-  <div class="hero">
-    <div>
-      <h1>One platform. Five ways to put people to work.</h1>
-      <p>Post a job, hire a freelancer, book a trainer, or request deployed manpower — every listing runs through the same central approval, pricing, and payment engine.</p>
-      <div style="margin-top:22px; display:flex; gap:10px;">
-        <button class="btn btn-solid">Browse jobs</button>
-        <button class="btn">Post a requirement</button>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div><div class="num">4,812</div><div class="lbl">Active job postings</div></div>
-      <div><div class="num">1,206</div><div class="lbl">Verified freelancers</div></div>
-      <div><div class="num">318</div><div class="lbl">Manpower vendors</div></div>
-    </div>
+  <div class="pub-actions">
+    <button class="btn">Log in</button>
+    <button class="btn btn-solid">Register</button>
   </div>
-
-  <div class="section">
-    <div class="section-head"><h2>Featured jobs</h2><a class="see-all" href="#">See all jobs →</a></div>
-    <div class="grid-4">
-      <div class="card">
-        <div class="tag">Full-time · Remote</div>
-        <h3>Senior Backend Engineer</h3>
-        <div class="meta">Nimbus Retail Pvt Ltd · Bengaluru</div>
-        <div class="foot"><span>₹18–26L /yr</span><span class="pill pill-green">Published</span></div>
-      </div>
-      <div class="card">
-        <div class="tag">Contract</div>
-        <h3>Site Electrical Supervisor</h3>
-        <div class="meta">Vantage Infra · Pune</div>
-        <div class="foot"><span>₹65k /mo</span><span class="pill pill-green">Published</span></div>
-      </div>
-      <div class="card">
-        <div class="tag">Full-time</div>
-        <h3>Talent Acquisition Lead</h3>
-        <div class="meta">Orbit Health · Hyderabad</div>
-        <div class="foot"><span>₹12–15L /yr</span><span class="pill pill-gold">Under review</span></div>
-      </div>
-      <div class="card">
-        <div class="tag">Part-time</div>
-        <h3>Bookkeeper (Freelance)</h3>
-        <div class="meta">Studio Marram · Remote</div>
-        <div class="foot"><span>₹800 /hr</span><span class="pill pill-green">Published</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><h2>Freelance services</h2><a class="see-all" href="#">Browse freelancers →</a></div>
-    <div class="grid-3">
-      <div class="card">
-        <div class="tag">Design</div>
-        <h3>Brand identity in 7 days</h3>
-        <div class="meta">Meera K. · ★ 4.9 (112 reviews)</div>
-        <div class="foot"><span>From ₹22,000</span><span class="pill pill-slate">Fixed price</span></div>
-      </div>
-      <div class="card">
-        <div class="tag">Engineering</div>
-        <h3>React + Node MVP build</h3>
-        <div class="meta">Arjun P. · ★ 4.8 (76 reviews)</div>
-        <div class="foot"><span>₹1,400 /hr</span><span class="pill pill-slate">Hourly</span></div>
-      </div>
-      <div class="card">
-        <div class="tag">Compliance</div>
-        <h3>GST filing &amp; reconciliation</h3>
-        <div class="meta">Ledgerline CA Services · ★ 5.0 (44 reviews)</div>
-        <div class="foot"><span>From ₹4,500 /mo</span><span class="pill pill-slate">Retainer</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><h2>Explore the platform</h2></div>
-    <div class="module-strip">
-      <a href="#"><div class="num">01</div><h3>Training programs</h3><p>Cohort &amp; corporate training, run by verified trainers.</p></a>
-      <a href="#"><div class="num">02</div><h3>Manpower services</h3><p>Request deployed workers through vetted vendors.</p></a>
-      <a href="#"><div class="num">03</div><h3>For employers</h3><p>Post roles, screen candidates, manage offers.</p></a>
-      <a href="#"><div class="num">04</div><h3>For vendors</h3><p>Register, get verified, quote on requirements.</p></a>
-    </div>
-  </div>
-
-  <footer class="pub">
-    <span>© Job Easy Platform</span>
-    <span>About · Contact · Terms · Privacy</span>
-  </footer>
 </div>
 
-<!-- ========================= USER DASHBOARD ========================= -->
-<div class="view" id="view-dashboard">
-  <div class="app-shell">
-    <div class="sidebar">
-      <div class="side-label">Workspace</div>
-      <a class="on" href="#"> Overview</a>
-      <a href="#">Applications</a>
-      <a href="#">Projects</a>
-      <a href="#">Wallet</a>
-      <a href="#">Messages</a>
-      <a href="#">Documents</a>
+<div class="hero">
+  <div>
+    <h1>One platform. Five ways to put people to work.</h1>
+    <p>Post a job, hire a freelancer, book a trainer, or request deployed manpower — listings are powered by our central API.</p>
+    <div style="margin-top:20px; display:flex; gap:10px;">
+      <a href="/jobs.html" class="btn btn-solid">Browse jobs</a>
+      <a href="#post" class="btn">Post a requirement</a>
     </div>
-    <div class="app-main">
-      <div class="app-topline">
-        <h2>Overview</h2>
-        <div class="who">Signed in as <strong>Ritika Sen</strong> · Job Seeker + Freelancer</div>
-      </div>
+  </div>
+  <div class="hero-stats" id="hero-stats">
+    <div style="padding:18px 0 0"><div class="num" id="stat-jobs">—</div><div class="lbl">Active job postings</div></div>
+    <div style="padding:18px 0 0"><div class="num" id="stat-freelancers">—</div><div class="lbl">Verified freelancers</div></div>
+    <div style="padding:18px 0 0"><div class="num" id="stat-vendors">—</div><div class="lbl">Manpower vendors</div></div>
+  </div>
+</div>
 
-      <div class="stat-row">
-        <div class="stat"><div class="lbl">Active applications</div><div class="val">6</div><div class="sub">2 in interview stage</div></div>
-        <div class="stat"><div class="lbl">Open proposals</div><div class="val">3</div><div class="sub">1 awaiting client reply</div></div>
-        <div class="stat"><div class="lbl">Wallet balance</div><div class="val">₹42,300</div><div class="sub">₹8,000 on hold</div></div>
-        <div class="stat"><div class="lbl">Unread messages</div><div class="val">4</div></div>
-      </div>
+<div class="section" style="padding:30px 40px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h2>Featured jobs</h2><a href="/jobs.html">See all jobs →</a></div>
+  <div id="jobs-grid" class="grid-4">
+    <!-- Jobs will be rendered here -->
+  </div>
+</div>
 
-      <div class="two-col">
-        <div>
-          <div class="panel">
-            <div class="p-head"><h3>Recent applications</h3><span class="cnt">job_applications</span></div>
-            <table>
-              <tr><th>Role</th><th>Company</th><th>Applied</th><th>Status</th></tr>
-              <tr><td><div class="row-title">Senior Backend Engineer</div><div class="row-sub">Full-time · Remote</div></td><td>Nimbus Retail</td><td>2 days ago</td><td><span class="pill pill-go
+<footer class="pub">
+  <span>© Job Easy Platform</span>
+  <span>About · Contact · Terms · Privacy</span>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
