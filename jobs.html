@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jobs — Job Easy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --ink:#14213D; --paper:#FAF8F3; --line:#E1DACB; --gold:#B8863B; --slate:#6B7280; }
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:var(--paper);color:var(--ink)}
+    .container{max-width:1100px;margin:30px auto;padding:0 20px}
+    h1{font-family:'Space Grotesk',sans-serif}
+    .jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:#fff;border:1px solid var(--line);padding:16px}
+    .tag{font-size:11px;text-transform:uppercase;color:var(--gold);font-weight:700}
+    @media (max-width:880px){.jobs-grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/index.html">← Home</a>
+    <h1>All Jobs</h1>
+    <div id="jobsGrid" class="jobs-grid">Loading…</div>
+  </div>
+  <script>
+    async function fetchJobs(){
+      try{
+        const res = await fetch('/api/v1/jobs');
+        if(!res.ok) throw new Error('API error '+res.status);
+        const data = await res.json();
+        return Array.isArray(data) ? data : (data.items || data.jobs || []);
+      }catch(e){
+        console.warn('Falling back to static jobs.json', e);
+        const res = await fetch('/data/jobs.json');
+        return (await res.json()) || [];
+      }
+    }
+    (async ()=>{
+      const grid = document.getElementById('jobsGrid');
+      const jobs = await fetchJobs();
+      if(!jobs.length){ grid.innerHTML='<div class="card">No jobs found.</div>'; return }
+      grid.innerHTML='';
+      jobs.forEach(j=>{
+        const el = document.createElement('div'); el.className='card';
+        el.innerHTML = `
+          <div class="tag">${(j.type||'Job').toUpperCase()}</div>
+          <h3 style="margin:8px 0">${j.title||j.role||'Untitled'}</h3>
+          <div style="color:var(--slate)">${(j.employer&&j.employer.name)||j.company||'Unknown'} · ${j.location||j.city||'Remote'}</div>
+          <p style="margin-top:10px;color:var(--slate)">${j.summary||j.description||''}</p>
+          <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:13px;color:var(--slate)">${j.salary||''}</div>
+            <a class="btn" href="/index.html#job-${j.id||j.uuid||''}">View</a>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+    })();
+  </script>
+</body>
+</html>

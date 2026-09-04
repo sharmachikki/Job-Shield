@@ -1,0 +1,29 @@
+[
+  {
+    "id": "job-1",
+    "title": "Senior Backend Engineer",
+    "type": "full-time",
+    "employer": { "name": "Nimbus Retail Pvt Ltd" },
+    "location": "Bengaluru",
+    "salary": "₹18–26L /yr",
+    "summary": "Design and implement scalable backend services."
+  },
+  {
+    "id": "job-2",
+    "title": "Site Electrical Supervisor",
+    "type": "contract",
+    "employer": { "name": "Vantage Infra" },
+    "location": "Pune",
+    "salary": "₹65k /mo",
+    "summary": "Supervise on-site electrical teams for construction projects."
+  },
+  {
+    "id": "job-3",
+    "title": "React + Node MVP engineer",
+    "type": "freelance",
+    "employer": { "name": "Studio Marram" },
+    "location": "Remote",
+    "salary": "₹1400 /hr",
+    "summary": "Build MVP features using React and Node.js."
+  }
+]
